@@ -48,7 +48,12 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  pending "Fill in this step in movie_steps.rb"
+  # pending "Fill in this step in movie_steps.rb"
+  temp = Movie.all
+  temp.each do |mv|
+    steps %{Then I should see "#{mv.title}"}
+  end
+  
 end
 
 ### Utility Steps Just for this assignment.

@@ -43,3 +43,4 @@ Scenario: restrict to movies with "PG" or "R" ratings
 Scenario: all ratings selected
   # your steps here
   # Then complete the rest of of this scenario
+  Then I should see all the movies
