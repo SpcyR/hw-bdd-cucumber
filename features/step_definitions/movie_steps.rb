@@ -19,7 +19,12 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  pending "Fill in this step in movie_steps.rb"
+  # pending "Fill in this step in movie_steps.rb"
+  page_info = page.body
+  e1_index = page_info.index(e1)
+  e2_index = page_info.index(e2)
+
+  expect(e1_index).to be < e2_index
 end
 
 # Make it easier to express checking or unchecking several boxes at once
