@@ -14,12 +14,15 @@ module NavigationHelpers
     case page_name
 
     when /^the home\s?page$/
-      '/'
+      '/movies'
 
     when /^the RottenPotatoes home\s?page$/ 
       '/movies'
 
     when /^the Create New Movie \s?page$/ 
+      '/movies/new'
+
+    when /^the "Search Results" \s?page$/ 
       '/movies/new'
 
     # Add more mappings here.

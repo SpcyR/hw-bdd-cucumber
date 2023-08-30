@@ -19,6 +19,9 @@ class MoviesController < ApplicationController
 
   def new
     # default: render 'new' template
+    @movie_title = params[:name]
+    @movie_rate = params[:rate]
+    @movie_date = params[:date] || Date.today.strftime()
   end
 
   def create
@@ -43,6 +46,18 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+
+  def search_tmdb
+    @movie_name = params[:movie][:title]
+    if @movie_name == "Inception"
+      @rating = "PG-13"
+      @release_date = "2010-07-08"
+      redirect_to new_movie_path( name:@movie_name, rate:@rating, date:@release_date)
+    else
+      redirect_to movies_path
+      flash[:notice] = " '#{@movie_name}' was not found in TMDb."
+    end
   end
 
   private
@@ -70,4 +85,6 @@ class MoviesController < ApplicationController
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
+
+
 end
