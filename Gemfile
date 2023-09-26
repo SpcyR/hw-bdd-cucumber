@@ -24,6 +24,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-byebug'
   gem 'dotenv-rails'
+  gem 'themoviedb'
 
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3', '~> 1.3.6'
