@@ -15,10 +15,9 @@ class MoviesController < ApplicationController
     @movies = Movie.with_ratings(ratings_list, sort_by)
     @ratings_to_show_hash = ratings_hash
     @sort_by = sort_by
-    # remember the correct settings for next time
-    session['ratings'] = ratings_list
-    session['sort_by'] = @sort_by
+    store_settings_in_session
   end
+
 
   def new
     if params[:movie] 
@@ -55,20 +54,26 @@ class MoviesController < ApplicationController
   end
 
   def search_tmdb
-    @movie_name = params[:movie][:title]
-    find_movie = Tmdb::Movie.find(@movie_name) 
-    if !find_movie.empty?
-      first_movie = find_movie[0]
-      @release_date = first_movie.release_date
-      @name = first_movie.title
-      redirect_to new_movie_path( movie:{title:@name, release_date:@release_date})
+    @movie_name = params.dig(:movie, :title)
+    find_movie = Tmdb::Movie.find(@movie_name)
+  
+    if find_movie.present?
+      handle_found_movie(find_movie.first)
     else
-      redirect_to movies_path
+      redirect_to_movies_path
       flash[:notice] = " '#{@movie_name}' was not found in TMDb."
     end
   end
 
   private
+
+  
+  def handle_found_movie(first_movie)
+    @release_date = first_movie.release_date
+    @name = first_movie.title
+    # redirect_to_new_movie
+    redirect_to new_movie_path(movie: { title: @name, release_date: @release_date })
+  end
 
   def force_index_redirect
     if !params.key?(:ratings) || !params.key?(:sort_by)
@@ -94,5 +99,9 @@ class MoviesController < ApplicationController
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
 
+  def store_settings_in_session
+    session['ratings'] = ratings_list
+    session['sort_by'] = @sort_by
+  end
 
 end
