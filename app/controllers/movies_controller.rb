@@ -3,8 +3,10 @@ class MoviesController < ApplicationController
   before_action :force_index_redirect, only: [:index]
 
   def show
+    
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
+    #byebug
     # will render app/views/movies/show.<extension> by default
   end
 
@@ -19,10 +21,13 @@ class MoviesController < ApplicationController
   end
 
   def new
+    if params[:movie] 
+      @movie = Movie.new(movie_params)
+    end
     # default: render 'new' template
-    @movie_title = params[:name]
-    @movie_rate = params[:rate]
-    @movie_date = params[:date] || Date.today.strftime()
+    # @movie_title = params[:name]
+    # @movie_rate = params[:rate]
+    # @movie_date = params[:date] || Date.today.strftime()
   end
 
   def create
@@ -56,7 +61,7 @@ class MoviesController < ApplicationController
       first_movie = find_movie[0]
       @release_date = first_movie.release_date
       @name = first_movie.title
-      redirect_to new_movie_path( name:@name, date:@release_date)
+      redirect_to new_movie_path( movie:{title:@name, release_date:@release_date})
     else
       redirect_to movies_path
       flash[:notice] = " '#{@movie_name}' was not found in TMDb."
