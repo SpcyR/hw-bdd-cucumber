@@ -303,6 +303,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   byebug
   capybara
   cucumber-rails

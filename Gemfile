@@ -49,3 +49,5 @@ gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 
 gem 'reek', '~> 6.1', '>= 6.1.4'
+
+gem 'activesupport'
