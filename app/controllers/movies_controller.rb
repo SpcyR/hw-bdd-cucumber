@@ -31,11 +31,11 @@ class MoviesController < ApplicationController
   end
 
   def edit
-    @movie = Movie.find params[:id]
+    @movie = Movie.find(params[:id])
   end
 
   def update
-    @movie = Movie.find params[:id]
+    @movie = Movie.find(params[:id])
     @movie.update_attributes!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
@@ -50,13 +50,13 @@ class MoviesController < ApplicationController
 
   def search_tmdb
     @movie_name = params.dig(:movie, :title)
-    find_movie = TmdbSearcher.search_movie(@movie_name)
+    find_movie = Tmdb::Movie.find(@movie_name)
   
     if find_movie.present?
       handle_found_movie(find_movie.first)
     else
       flash.now[:notice] = "'#{@movie_name}' was not found in TMDb."
-      redirect_to_movies_path
+      redirect_to movies_path
     end
   end
 
@@ -98,11 +98,4 @@ class MoviesController < ApplicationController
     session['sort_by'] = @sort_by
   end
 
-end
-
-class TmdbSearcher
-  def self.search_movie(movie_name)
-    Tmdb::Api.key(ENV['API_TMDB'])
-    Tmdb::Movie.find(movie_name)
-  end
 end
